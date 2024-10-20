@@ -12,16 +12,17 @@ class TestLanguageChange(unittest.TestCase):
         self.driver = webdriver.Chrome()  # or any browser driver
         self.driver.get("https://www.avianca.com/")  # URL of the application
         self.home_page = HomePage(self.driver)
+        self.driver.maximize_window()
 
 
     def test_language_change(self):
         
         #Idiomas junto con el valor que se espera de un objeto
         languages = {
-            'Español': 'Buscar',  
-            'English': 'Search',      
-            'Português': 'Buscar voos',   
-            'Français': 'Rechercher' 
+            'Español': ['Buscar','es'],  
+            'English': ['Search','en'],      
+            'Português': ['Buscar voos','pt'],   
+            'Français': ['Rechercher','fr'] 
         }
 
         #Controlamos Cookies y ventanas que puede aparecer
@@ -29,10 +30,10 @@ class TestLanguageChange(unittest.TestCase):
         self.home_page.close_header()
         
         #Ciclo para recorrer cada idioma, y validar que el objeto tenga el valor esperado
-        for lang, expected_text in languages.items():
+        for lang, (expected_text,expected_text_local_storage) in languages.items():
             with self.subTest(lang=lang):
                 self.home_page.select_language(lang)
-                self.assertTrue(self.home_page.verify_language_change(expected_text),
+                self.assertTrue(self.home_page.verify_language_change(expected_text,expected_text_local_storage),
                                 f"Language change to {lang} failed.")
 
         console.printInfoColor("testLanguageChange","Pruebas segun el resultado esperado")

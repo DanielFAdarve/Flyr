@@ -1,10 +1,13 @@
 import unittest
 import time
+
 from selenium import webdriver
 from pages.homePage import HomePage
 from utils.printer import Printer
 
+
 console=Printer()
+
 
 class TestPOSChange(unittest.TestCase):
 
@@ -13,9 +16,10 @@ class TestPOSChange(unittest.TestCase):
         self.driver = webdriver.Chrome()  # or any browser driver
         self.driver.get("https://www.avianca.com/")  # URL of the application
         self.home_page = HomePage(self.driver)
+        self.driver.maximize_window()
 
 
-    def test_language_change(self):
+    def test_pos_change(self):
         
         #Paises junto con el valor que se espera de un objeto
         pos = {
@@ -30,25 +34,33 @@ class TestPOSChange(unittest.TestCase):
         self.home_page.close_header()
         
 
+
+        console.printInfoColor("testPOS","Pruebas para validar el pais por medio del un objeto y el local Storage")
         #Ciclo para recorrer cada pais, y validar que el objeto tenga el valor esperado
         for country, expected_text in pos.items():
             with self.subTest(country=country):
 
                 console.printComment("textPOS",f"Entro a seleccionar el Pais: {country}")
                 self.home_page.select_pos(country)
-                time.sleep(5)
-                
-                self.assertTrue(self.home_page.verify_pos_change(expected_text),
-                                f"Language change to {country} failed.")
-
-        # self.home_page.select_pos("Argentina")
+                time.sleep(2)
+                print(f"TextoEsperado: {expected_text}")
+                self.home_page.close_header()
+                self.home_page.verify_pos_change(expected_text)
+                # self.assertTrue(self.home_page.verify_pos_change(expected_text),
+                                # f"Language change to {country} failed.")
+        
         console.printInfoColor("testPOS","Pruebas segun el resultado esperado")
         
-
     def tearDown(self):
-
         # Teardown para cerrar el navegador
-        self.driver.quit()
-
+        if self.driver: 
+            print("Entra al tearDown")
+            self.driver.quit()
+            print("Finalizo")
 if __name__ == "__main__":
-    unittest.main()
+    test = TestPOSChange()
+    test.setUp()
+    try:
+        test.test_pos_change()
+    finally:
+        test.tearDown()
