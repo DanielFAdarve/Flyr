@@ -1,10 +1,11 @@
 import time
+import random
 import json
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from utils.printer import Printer
 from utils.localStorage import SessionStorage
-from utils.helpers import wait_for_element, wait_for_clickable_element, scroll_up
+from utils.helpers import wait_for_element, wait_for_clickable_element, scroll_up,wait_for_elements
 
 consola = Printer()
 
@@ -29,7 +30,7 @@ class HomePage:
         self.pos_verification_element = "//button[contains(@id,'pointOfSaleSelectorId')]"
 
         # Selección del Viaje
-        self.one_way = (By.ID, "journeytypeId_1")
+        self.one_way = (By.XPATH, "//div[@class='journey-type-control']//div[@class='journey-type-radio_item'][2]")
         self.date = (By.ID, "departureInputDatePickerId")
         self.origin_button = (By.ID, "originBtn")
         self.origin_input = (By.XPATH, '//input[@aria-label="Search.DepartureArrivalFocusInfo"]')
@@ -40,6 +41,12 @@ class HomePage:
         self.count_passenger = (By.CLASS_NAME, "ui-num-ud_input")
         self.confirm_passenger = (By.XPATH, "//button[.//span[text()='Confirmar']]")
         self.search_button = (By.XPATH, "//button[2][@type='submit']//span[text()=' Buscar ']")
+
+        # Opciones del nav del header
+        self.nav_options = (By.XPATH,"//ul[@class='main-header_nav-primary_list']//li") 
+        self.nav_btn = "//ul[@class='main-header_nav-primary_list']//li//button//span[contains(text(),'{}')]"
+        self.nav_items = "//div[@class='main-header_primary-nav_submenu_inner' and .//span[contains(text(),'{}')] and .//ul[contains(@class,'main-header_primary-nav_submenu_list')]]//li[not(.//a[contains(@href,'https:')]) and not(.//a[contains(@target,'_blank')])]"
+        self.nav_item_btn="//ul[contains(@class,'main-header_primary-nav_submenu_list')]//li//span[contains(text(),'{}')]"
 
     def open_language_dropdown(self):
         wait_for_clickable_element(self.driver, *self.language_dropdown).click()
@@ -120,6 +127,56 @@ class HomePage:
         actual_text = self.get_selected_pos()
         local_storage_value = self.get_local_storage_pos('pointOfSale', 'name')
         return expected_text in actual_text and expected_text == local_storage_value
+
+    def get_random_nav_option(self):
+        nav_items = wait_for_elements(self.driver, *self.nav_options)
+        nav_texts = []
+    
+        # obtenemos todos los elementos del navbar del header
+        for item in nav_items:
+            if item.text !='':
+                nav_texts.append(item.text)
+        
+        #Obtenemos cualquier ventana de manera aleatoria, partiendo desde el index 1, debido a que esa es la ventana del home
+        random_index = random.randint(1, len(nav_texts) - 1)
+        nav=nav_texts[random_index]
+
+        if nav.__contains__('Check-in'):
+            nav=nav.replace('Check-in','')
+
+        return nav.strip()
+
+    def select_nav_option(self,nav):
+        nav_selector=  self.nav_btn.format(nav)
+        wait_for_clickable_element(self.driver, By.XPATH, nav_selector).click()
+
+    def get_random_nav_item(self,nav):
+
+        nav_selector=  self.nav_items.format(nav)
+        time.sleep(5)
+        nav_items = wait_for_elements(self.driver,By.XPATH, nav_selector,15)
+        # print(nav_items)
+        nav_texts = []
+    
+        # obtenemos todos los elementos del navbar del header
+        for item in nav_items:
+            if item.text !='':
+                nav_texts.append(item.text)
+        
+        #Obtenemos cualquier item de manera aleatoria
+        random_index = random.randint(0, len(nav_texts) - 1)
+        nav=nav_texts[random_index]
+
+        return nav
+
+    def select_nav_item(self,nav_item):
+        nav_selector=  self.nav_item_btn.format(nav_item)
+        wait_for_clickable_element(self.driver, By.XPATH, nav_selector).click()
+    
+    def get_url(self):
+        time.sleep(3)
+        new_url = self.driver.current_url
+        return new_url    
 
     def test(self):
         wait_for_clickable_element(self.driver, *self.date).click()

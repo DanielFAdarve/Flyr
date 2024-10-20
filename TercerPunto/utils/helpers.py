@@ -15,5 +15,14 @@ def wait_for_hidde_page_loader(driver):
         EC.invisibility_of_element_located((By.CLASS_NAME, "page-loader"))
     )
 
+#Para obtener todos los elementos
+def wait_for_elements(driver, by, value, timeout=10):
+    wait_for_hidde_page_loader(driver)
+    return WebDriverWait(driver, timeout).until(EC.presence_of_all_elements_located((by, value)))
+
+def wait_for_clickable_elements(driver, by, value, timeout=10):
+    wait_for_hidde_page_loader(driver)
+    return WebDriverWait(driver, timeout).until(EC.visibility_of_all_elements_located((by, value)))
+
 def scroll_up(driver, pixels=100):
     driver.execute_script(f"window.scrollBy(0, -{pixels});")

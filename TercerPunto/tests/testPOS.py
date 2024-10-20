@@ -1,6 +1,5 @@
 import unittest
 import time
-
 from selenium import webdriver
 from pages.homePage import HomePage
 from utils.printer import Printer
