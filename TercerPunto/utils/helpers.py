@@ -26,3 +26,17 @@ def wait_for_clickable_elements(driver, by, value, timeout=10):
 
 def scroll_up(driver, pixels=100):
     driver.execute_script(f"window.scrollBy(0, -{pixels});")
+
+def remove_tildes(text):
+    # Diccionario de reemplazos de tildes
+    replacements = {
+        'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
+        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+        'ñ': 'n', 'Ñ': 'N'
+    }
+
+    # Reemplaza cada tilde en la cadena
+    for accented_char, unaccented_char in replacements.items():
+        text = text.replace(accented_char, unaccented_char)
+    
+    return text

@@ -35,7 +35,7 @@ class TestHeaderRedirections(unittest.TestCase):
             # Aseguramos que la nav_option no se ha utilizado
             while nav_option in used_options:
                 nav_option = home_page.get_random_nav_option()
-            used_options.add(nav_option)  # Agregamos a las opciones usadas
+            used_options.add(nav_option)  
 
             # Seleccionamos el desplegable
             home_page.select_nav_option(nav_option)

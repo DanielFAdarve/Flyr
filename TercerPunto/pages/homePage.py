@@ -48,6 +48,14 @@ class HomePage:
         self.nav_items = "//div[@class='main-header_primary-nav_submenu_inner' and .//span[contains(text(),'{}')] and .//ul[contains(@class,'main-header_primary-nav_submenu_list')]]//li[not(.//a[contains(@href,'https:')]) and not(.//a[contains(@target,'_blank')])]"
         self.nav_item_btn="//ul[contains(@class,'main-header_primary-nav_submenu_list')]//li//span[contains(text(),'{}')]"
 
+        #Opciones del footer
+        self.footer_options = (By.XPATH,"//div[@class='main-footer_nav']//li[not(.//a[@target='_blank'])]")
+        self.footer_button = "//div[@class='main-footer_nav']//li[not(.//a[@target='_blank'])]//span[contains(text(),'{}')]"
+
+        #Home 
+        self.home_button=(By.XPATH,"//a[@class='main-header_logo_link']")
+
+
     def open_language_dropdown(self):
         wait_for_clickable_element(self.driver, *self.language_dropdown).click()
 
@@ -177,6 +185,29 @@ class HomePage:
         time.sleep(3)
         new_url = self.driver.current_url
         return new_url    
+
+    def get_random_footer_option(self):
+        footer_items = wait_for_elements(self.driver, *self.footer_options)
+        footer_links = []
+    
+        # obtenemos todos los elementos del navbar del header
+        for item in footer_items:
+            if item.text !='':
+                footer_links.append(item.text)
+        
+        #Obtenemos cualquier ventana de manera aleatoria, partiendo desde el index 1, debido a que esa es la ventana del home
+        random_index = random.randint(1, len(footer_links) - 1)
+        footer_option=footer_links[random_index]
+
+        return footer_option.strip()
+
+    def select_footer_option(self,footer_option):
+        footer_selector=  self.footer_button.format(footer_option)
+        wait_for_clickable_element(self.driver, By.XPATH, footer_selector).click()
+
+    def return_home_page(self):
+         wait_for_clickable_element(self.driver, *self.home_button).click()
+         time.sleep(5)
 
     def test(self):
         wait_for_clickable_element(self.driver, *self.date).click()
