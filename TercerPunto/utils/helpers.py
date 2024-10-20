@@ -24,9 +24,16 @@ def wait_for_clickable_elements(driver, by, value, timeout=10):
     wait_for_hidde_page_loader(driver)
     return WebDriverWait(driver, timeout).until(EC.visibility_of_all_elements_located((by, value)))
 
+#Para llenas los campos de los form
+def form_fill_input(field,value):
+    field.clear()
+    field.send_keys(value)
+
+#Scroll
 def scroll_up(driver, pixels=100):
     driver.execute_script(f"window.scrollBy(0, -{pixels});")
 
+#Limpieza de datos
 def remove_tildes(text):
     # Diccionario de reemplazos de tildes
     replacements = {

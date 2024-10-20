@@ -10,6 +10,7 @@ from utils.helpers import wait_for_element, wait_for_clickable_element, scroll_u
 consola = Printer()
 
 class HomePage:
+
     def __init__(self, driver):
         self.group_name = "HomePage"
         self.driver = driver
@@ -37,6 +38,8 @@ class HomePage:
         self.destination_button = (By.ID, "arrivalStationInputLabel")
         self.destination_input = (By.CSS_SELECTOR, 'input[placeholder="Hacia"]')
         self.passenger_button = (By.CSS_SELECTOR, 'button[aria-label^="Pasajeros"]')
+        self.passenger_type_count=(By.XPATH,"//div[@class='ui-num-ud_input']")
+        self.passenger_button_position="//li[{}]//button[@class='ui-num-ud_button plus']"
         self.add_passenger_button = (By.CLASS_NAME, "ui-num-ud_button")
         self.count_passenger = (By.CLASS_NAME, "ui-num-ud_input")
         self.confirm_passenger = (By.XPATH, "//button[.//span[text()='Confirmar']]")
@@ -54,7 +57,6 @@ class HomePage:
 
         #Home 
         self.home_button=(By.XPATH,"//a[@class='main-header_logo_link']")
-
 
     def open_language_dropdown(self):
         wait_for_clickable_element(self.driver, *self.language_dropdown).click()
@@ -84,10 +86,16 @@ class HomePage:
         destination_input.send_keys(destination)
         destination_input.send_keys(Keys.ENTER)
 
-    def select_passengers(self, max_passengers=1):
+    def open_passenger_selection(self):
         wait_for_clickable_element(self.driver, *self.passenger_button).click()
-        buttons = self.driver.find_elements(*self.add_passenger_button)
 
+    def select_passengers(self, max_passengers=1):
+        self.open_passenger_selection
+        buttons = self.driver.find_elements(*self.passenger_type_count)
+
+        # for button in buttons:
+            
+        #     print(button.text)
         for index, button in enumerate(buttons):
             try:
                 if index < max_passengers:
@@ -98,6 +106,10 @@ class HomePage:
                 consola.printWarnColor(f"homePage-select_passengers", f"No se pudo agregar el pasajero {index + 1}: {str(e)}")
         
         wait_for_clickable_element(self.driver, *self.confirm_passenger).click()
+
+    def add_passenger_count(self,position):
+        add_passenger_button_position = self.passenger_button_position.format(position)
+        wait_for_clickable_element(self.driver, By.XPATH, add_passenger_button_position).click()
 
     def search_flights(self):
         wait_for_clickable_element(self.driver, *self.search_button).click()

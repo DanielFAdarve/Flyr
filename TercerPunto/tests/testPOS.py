@@ -4,7 +4,6 @@ from selenium import webdriver
 from pages.homePage import HomePage
 from utils.printer import Printer
 
-
 console=Printer()
 
 
@@ -17,7 +16,6 @@ class TestPOSChange(unittest.TestCase):
         self.home_page = HomePage(self.driver)
         self.driver.maximize_window()
 
-
     def test_pos_change(self):
         
         #Paises junto con el valor que se espera de un objeto
@@ -27,29 +25,23 @@ class TestPOSChange(unittest.TestCase):
             'Chile': 'Chile'
         }
 
-
         #Controlamos Cookies y ventanas que puede aparecer
         self.home_page.control_cookies()
         self.home_page.close_header()
         
-
-
         console.printInfoColor("testPOS","Pruebas para validar el pais por medio del un objeto y el local Storage")
+
         #Ciclo para recorrer cada pais, y validar que el objeto tenga el valor esperado
         for country, expected_text in pos.items():
             with self.subTest(country=country):
-
                 console.printComment("textPOS",f"Entro a seleccionar el Pais: {country}")
                 self.home_page.select_pos(country)
                 time.sleep(2)
-                print(f"TextoEsperado: {expected_text}")
                 self.home_page.close_header()
-                self.home_page.verify_pos_change(expected_text)
-                # self.assertTrue(self.home_page.verify_pos_change(expected_text),
-                                # f"Language change to {country} failed.")
-        
+                self.assertTrue(self.home_page.verify_pos_change(expected_text),
+                                f"Cambio al pais {country} fallido.")
         console.printInfoColor("testPOS","Pruebas segun el resultado esperado")
-        
+    
     def tearDown(self):
         # Teardown para cerrar el navegador
         if self.driver: 
