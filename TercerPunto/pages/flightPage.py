@@ -6,9 +6,9 @@ class FlightPage:
     def __init__(self, driver):
         self.driver = driver
         self.drop_down_options = (By.XPATH, "//div[@class='journey_price-currency'][1]//span[@class='price text-space-gap']")
-        self.drop_down_return_options = (By.XPATH, "//div[@class='journey-select_container'][1]//button[contains(@class,'journey_price_button')]//span[contains(text(),'Desde')]")
+        self.drop_down_return_options = (By.XPATH, "(//div[contains(@class,'journey-selector-inbound')]//div[@class='journey-select_container']//button[contains(@class,'journey_price_button')])[1]")
         self.basic_fare_button = (By.XPATH, "//div[contains(@aria-label, 'Click to select basic fare')][2]//button[contains(@class, 'fare_button')]//div[@class='fare_button_label']")
-        self.basic_flex_button = (By.XPATH, "//div[@class='journey-control']//div[contains(@class,'journey_price-currency') and .//span[@class='price text-space-gap'] and .//span[contains(text(),'Desde')]]")
+        self.flex_fare_button = (By.XPATH, "//span[@class='fare_name' and contains(text(),'flex')]")
         self.continue_basic = (By.XPATH, "//div[@class='cro-button cro-no-accept-upsell-button']")
         self.confirm_flight_button = (By.XPATH, "//button[1]//span[contains(text(),' Continuar ')]")
 
@@ -28,9 +28,9 @@ class FlightPage:
 
     def select_return_basic_flex(self):
         # Selecciona la tarifa básica flexible
-        wait_for_clickable_element(self.driver, *self.drop_down_return_options).click()
+        wait_for_element(self.driver, *self.drop_down_return_options,15).click()
         time.sleep(5)
-        wait_for_clickable_element(self.driver, *self.basic_flex_button).click()
+        wait_for_clickable_element(self.driver, *self.flex_fare_button).click()
 
         # Trata de continuar, si aparece la opción
         try:
