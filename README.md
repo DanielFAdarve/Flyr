@@ -60,7 +60,7 @@ The web automation component is built using Selenium WebDriver with Python, foll
 
 ## Project Structure
 
-
+```
 ├── PrimerPunto/
 │   └── FooBar.py
 ├── SegundoPunto/
@@ -86,7 +86,7 @@ The web automation component is built using Selenium WebDriver with Python, foll
 │   │   └── printer.py
 │   ├── requirements.txt
 │   └── README.md
-
+```
 
 ### POM Architecture
 
