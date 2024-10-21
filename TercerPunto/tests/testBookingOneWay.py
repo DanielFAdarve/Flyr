@@ -80,7 +80,7 @@ class BookingTest(unittest.TestCase):
         print("Seleccionar Viaje")
         flight_page = FlightPage(self.driver)
         flight_page.select_basic_fare()
-
+        flight_page.confirm_flight()
       
         # Passengers Page
         passengers_page = PassengersPage(self.driver)
@@ -98,7 +98,11 @@ class BookingTest(unittest.TestCase):
 
         # Seatmap Page
         seatmap_page = SeatmapPage(self.driver)
-        seatmap_page.select_economy_seat()
+        
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
 
         # Payment Page
         payment_page = PaymentPage(self.driver)

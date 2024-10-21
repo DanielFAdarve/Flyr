@@ -32,6 +32,7 @@ class HomePage:
 
         # Selección del Viaje
         self.one_way = (By.XPATH, "//div[@class='journey-type-control']//div[@class='journey-type-radio_item'][2]")
+        self.round_trip = (By.XPATH, "//div[@class='journey-type-control']//div[@class='journey-type-radio_item'][1]")
         self.date = (By.ID, "departureInputDatePickerId")
         self.origin_button = (By.ID, "originBtn")
         self.origin_input = (By.XPATH, '//input[@aria-label="Search.DepartureArrivalFocusInfo"]')
@@ -75,6 +76,11 @@ class HomePage:
     def select_one_way(self):
         wait_for_clickable_element(self.driver, *self.one_way).click()
         consola.printComment("homePage-select_one_way", "Se seleccionó correctamente el botón de solo ida")
+
+    def select_round_trip(self):
+        wait_for_clickable_element(self.driver, *self.round_trip).click()
+        consola.printComment("homePage-select_one_way", "Se seleccionó correctamente el botón de solo ida")
+
 
     def select_flight_details(self, origin, destination):
         wait_for_clickable_element(self.driver, *self.origin_button).click()

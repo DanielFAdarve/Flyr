@@ -16,20 +16,65 @@ class BookingRoundTrip(unittest.TestCase):
         # time.sleep(10)
 
     def test_booking_one_way(self):
+        
         # Home Page
-        print("HomePage")
         home_page = HomePage(self.driver)
-        # home_page.test()
         home_page.control_cookies()
         home_page.close_header()
         
         #Valida el idioma
-        # home_page.select_language("Español")
+        home_page.select_language("Español")
 
+        #Selecciona el POS
+        home_page.select_pos('Colombia')
+        home_page.close_header()
+
+        #Informacion de Pruebas
+        passengers_info=[
+            {
+                "type":"Adulto",
+                "gender":"Masculino",
+                "first_name":"Daniel",
+                "last_name":"Adarve",
+                "date":"04-12-2003",
+                "nacionality":"Colombia"
+            },
+            {
+                "type":"Bebé",
+                "gender":"Femenino",
+                "first_name":"Laura",
+                "last_name":"Valencia",
+                "date":"06-09-2024",
+                "nacionality":"Colombia"
+            },{
+                "type":"Joven",
+                "gender":"Masculino",
+                "first_name":"Manuel",
+                "last_name":"Cardona",
+                "date":"04-12-2011",
+                "nacionality":"Colombia"
+            },
+            {   "type":"Niño",
+                "gender":"Masculino",
+                "first_name":"David",
+                "last_name":"Cardona",
+                "date":"04-12-2015",
+                "nacionality":"Colombia"
+            }
+            
+            ]
         #Seleccionar el vuelo, los pasajeros y buscar el vuelo
-        home_page.select_one_way()
+        home_page.select_round_trip()
         home_page.select_flight_details("Bogota", "Barranquilla")
-        home_page.select_passengers() 
+        time.sleep(10)
+        
+        #Agregamos los pasajeros
+        # home_page.select_passengers()
+        home_page.open_passenger_selection()
+        home_page.add_passenger_count("2")
+        home_page.add_passenger_count("3")
+        home_page.add_passenger_count("4")
+
         home_page.search_flights()
         time.sleep(15)
 
@@ -37,60 +82,38 @@ class BookingRoundTrip(unittest.TestCase):
         print("Seleccionar Viaje")
         flight_page = FlightPage(self.driver)
         flight_page.select_basic_fare()
-
-        time.sleep(200)
+        flight_page.select_return_basic_flex()
+        flight_page.confirm_flight()
+      
         # Passengers Page
         passengers_page = PassengersPage(self.driver)
 
-        #Informacion de Pruebas
-        passengers_info=[
-            {
-                "gender":"Masculino",
-                "first_name":"Daniel",
-                "last_name":"Adarve",
-                "date":"04-12-2024",
-                "nacionality":"Colombia"
-            },
-            {
-                "gender":"Masculino",
-                "first_name":"Daniel",
-                "last_name":"Adarve",
-                "date":"04-12-2024",
-                "nacionality":"Colombia"
-            },
-            {
-                "gender":"Masculino",
-                "first_name":"Daniel",
-                "last_name":"Adarve",
-                "date":"04-12-2024",
-                "nacionality":"Colombia"
-            },
-            {
-                "gender":"Masculino",
-                "first_name":"Daniel",
-                "last_name":"Adarve",
-                "date":"04-12-2024",
-                "nacionality":"Colombia"
-            },
-            {
-                "gender":"Masculino",
-                "first_name":"Daniel",
-                "last_name":"Adarve",
-                "date":"04-12-2024",
-                "nacionality":"Colombia"
-            },
-            ]
+        time.sleep(10)
 
         passengers_page.fill_passenger_details(passengers_info)
+        passengers_page.fill_reservation_owner("Colombia","3235043212","soplefox23@gmail.com")
         passengers_page.submit_passenger_info()
+        time.sleep(20)
+
+        # Services Page
+        services_page = ServicesPage(self.driver)
+        services_page.skip_services()
+
+        # Seatmap Page
+        seatmap_page = SeatmapPage(self.driver)
+        
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
 
         # Payment Page
         payment_page = PaymentPage(self.driver)
         payment_page.fill_payment_details("4111111111111111", "12/25", "123")
         payment_page.submit_payment()
 
-    # def tearDown(self):
-    #     self.driver.quit()
+    def tearDown(self):
+        self.driver.quit()
         
 
 if __name__ == "__main__":
