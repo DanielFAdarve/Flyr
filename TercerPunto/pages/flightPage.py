@@ -30,7 +30,7 @@ class FlightPage:
         # Selecciona la tarifa básica flexible
         wait_for_element(self.driver, *self.drop_down_return_options,15).click()
         time.sleep(5)
-        wait_for_clickable_element(self.driver, *self.flex_fare_button).click()
+        wait_for_element(self.driver, *self.flex_fare_button).click()
 
         # Trata de continuar, si aparece la opción
         try:
@@ -40,4 +40,4 @@ class FlightPage:
 
     def confirm_flight(self):
         # Confirmar vuelo
-        wait_for_clickable_element(self.driver, *self.confirm_flight_button).click()
+        wait_for_element(self.driver, *self.confirm_flight_button).click()

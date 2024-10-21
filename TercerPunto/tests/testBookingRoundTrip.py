@@ -97,20 +97,24 @@ class BookingRoundTrip(unittest.TestCase):
 
         # Services Page
         services_page = ServicesPage(self.driver)
-        services_page.skip_services()
+        services_page.add_service_lounge()
 
         # Seatmap Page
         seatmap_page = SeatmapPage(self.driver)
         
+        seatmap_page.select_seat('plus')
         seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('premium')
+        seatmap_page.go_to_pay()
+        
+        # seatmap_page.select_seat('economy')
 
         # Payment Page
         payment_page = PaymentPage(self.driver)
-        payment_page.fill_payment_details("4111111111111111", "12/25", "123")
-        payment_page.submit_payment()
+        time.sleep(20)
+        payment_page.fill_payment_details("daniel@gmail.com", "carrera 25", "manizales","Colombia")
+        
+        # payment_page.submit_payment()
 
     def tearDown(self):
         self.driver.quit()

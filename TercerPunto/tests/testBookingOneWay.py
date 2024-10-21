@@ -95,22 +95,26 @@ class BookingTest(unittest.TestCase):
         # Services Page
         services_page = ServicesPage(self.driver)
         services_page.skip_services()
-
+       
         # Seatmap Page
         seatmap_page = SeatmapPage(self.driver)
         
-        seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
-        seatmap_page.select_seat('economy')
 
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.select_seat('economy')
+        seatmap_page.go_to_pay()
+        
+    
         # Payment Page
         payment_page = PaymentPage(self.driver)
-        payment_page.fill_payment_details("4111111111111111", "12/25", "123")
-        payment_page.submit_payment()
-
-    # def tearDown(self):
-    #     self.driver.quit()
+        
+        time.sleep(20)
+        payment_page.fill_payment_details("daniel@gmail.com", "carrera 25", "manizales","Colombia")
+    
+    def tearDown(self):
+        self.driver.quit()
         
 
 if __name__ == "__main__":
